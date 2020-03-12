@@ -1,12 +1,8 @@
 package com.customer.app.controller;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.customer.app.entity.Customer;
+import com.customer.app.service.CityService;
 import com.customer.app.service.CountryService;
 import com.customer.app.service.CustomerService;
 import com.customer.app.service.StateService;
@@ -39,13 +36,16 @@ public class CustomerController {
 	@Autowired
 	private StateService stateService;
 	
+	@Autowired
+	private CityService cityService;
+	
+	
 	
 	@GetMapping("/list")
 	public String listCustomers(Model theModel) {
 		
 		// get customers from the service
 		List<Customer> theCustomers = customerService.getCustomers();
-
 		// add the customers to the model
 		theModel.addAttribute("customers", theCustomers);
 		
@@ -82,7 +82,11 @@ public class CustomerController {
 		Customer theCustomer = customerService.getCustomer(theId);	
 		
 		theModel.addAttribute("country",countryService.getCountry());
-		
+		String cid=theCustomer.getCountry();
+		String sid=theCustomer.getState();
+		theModel.addAttribute("state",stateService.getState(cid));
+		theModel.addAttribute("city",cityService.getCity(sid));
+		theModel.addAttribute("desc",countryService.getCountry(cid));
 		// set customer as a model attribute to pre-populate the form
 		theModel.addAttribute("customer", theCustomer);
 		
@@ -123,7 +127,24 @@ public class CustomerController {
 		return gson.toJson(stateService.getState(id));
 	}
 	
+	@ResponseBody
+	@GetMapping("loadCityByState/{id}")
+	public String loadCityByState(@PathVariable("id") String id) {
 	
+		
+		Gson gson = new Gson();
+		return gson.toJson(cityService.getCity(id));
+	}
+	
+	
+	@ResponseBody
+	@GetMapping("loadDescByCountry/{id}")
+	public String loadDescByCountry(@PathVariable("id") String id) {
+	
+		
+		Gson gson = new Gson();
+		return gson.toJson(countryService.getCountry(id));
+	}
 	
 
 }

@@ -30,6 +30,30 @@ public class Customer {
 	@Column(name="state")
 	private String state;
 	
+	@Column(name="city")
+	private String city;
+	
+	@Column(name="country_desc")
+	private String countrydesc;
+	
+	
+	
+	public String getCountrydesc() {
+		return countrydesc;
+	}
+
+	public void setCountrydesc(String countrydesc) {
+		this.countrydesc = countrydesc;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
 	public String getState() {
 		return state;
 	}
@@ -79,8 +103,12 @@ public class Customer {
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", country=" + country
-				+ ", state=" + state + "]";
+				+ ", state=" + state + ", city=" + city + ", countrydesc=" + countrydesc + "]";
 	}
+
+	
+
+	
 
 	
 	

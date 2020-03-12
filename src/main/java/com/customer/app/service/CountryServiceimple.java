@@ -22,4 +22,12 @@ public class CountryServiceimple implements CountryService {
 		return countryDAO.getCountry();
 	}
 
+	@Override
+	@Transactional
+	public List<Country> getCountry(String id) {
+		// TODO Auto-generated method stub
+		return countryDAO.getCountry(id);
+	}
+
+
 }
