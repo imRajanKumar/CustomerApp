@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  
+ 
 </head>
 
 	<%-- <link type="text/css"
@@ -44,7 +44,6 @@ $(document).ready(function(){
 				url: '${pageContext.request.contextPath }/customer/loadDescByCountry/' + countryId,
 				success: function(result) {
 					var result = JSON.parse(result);
-					
 					 var s='';
 					for(var i = 0; i < result.length; i++) {
 						s += '<option value="' + result[i].id + '">' + result[i].countryName + '</option>';
@@ -55,6 +54,23 @@ $(document).ready(function(){
 				
 			});  
 		
+		 $.ajax({
+				type: 'GET',
+				url: '${pageContext.request.contextPath }/customer/loadPaymentMethodsByCountry/' + countryId,
+				success: function(result) {
+					var result = JSON.parse(result);
+					var s='<option value=""><strong>Select</strong></option>';
+					for(var i = 0; i < result.length; i++) {
+						s += '<option value="' + result[i].paymentid + '">' + result[i].paymentName + '</option>';
+					}
+					$('#paymentid').html(s);
+				}
+				
+			 
+			});   
+		 
+		 
+		 
 		 $('#dropDownId').val();
 		
 		if(countryId=="IND")
@@ -153,6 +169,10 @@ $(document).ready(function(){
    		<div class = "panel-body">
    		<div class="col-md-6">
    		
+   			
+   		 
+   		
+   		
    		<div class="form-group ">
 		      <label class="control-label col-sm-4" for="name">First Name</label>
 		      <div class="col-sm-8 input-group">
@@ -160,12 +180,14 @@ $(document).ready(function(){
         	   
 		      </div>
 		    </div>   
+		    
+		    
    		    
 		   <div class="form-group ">
 		      <label class="control-label col-sm-4" for="name">Country</label>
 		      <div class="col-sm-8 input-group">
 		       	   
-		       	   <form:select path="country" id="countryid" class="form-control">
+		       	   <form:select path="country" id="countryid"  class="form-control">
    <form:option value="NONE" label="--- Select ---"/>
    
          <form:options items="${country}" itemValue="id" itemLabel="countryName"/>
@@ -174,7 +196,19 @@ $(document).ready(function(){
 		      </div>
 		    </div>   
 		       
-		   
+		    <div class="form-group ">
+		      <label class="control-label col-sm-4" for="name">Country2</label>
+		      <div class="col-sm-8 input-group">
+		       	   
+		       	   <form:select path="countrylist" id="countryidd" multiple="true" class="form-control">
+   <form:option value="NONE" label="--- Select ---"/>
+   
+         <form:options items="${country}" itemValue="id" itemLabel="countryName"/>
+   
+</form:select>
+		      </div>
+		    </div>   
+		    
 		   <div class="form-group ">
 		      <label class="control-label col-sm-4" for="name">CountryDescription</label>
 		      <div class="col-sm-8 input-group">
@@ -226,6 +260,18 @@ $(document).ready(function(){
 		      </div>
 		    </div>   
 		    
+		    
+		    <div class="form-group ">
+		      <label class="control-label col-sm-4" for="name">paymentmethod</label>
+		      <div class="col-sm-8 input-group">
+		       	   
+		       	   <form:select path="paymentlist" id="paymentid" multiple="true" class="form-control">
+   
+          <form:options items="${pmethod}" itemValue="paymentid" itemLabel="paymentName"/> 
+   
+</form:select>
+		      </div>
+		    </div>   
 		    
    		</div>
    						

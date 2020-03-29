@@ -1,11 +1,23 @@
 package com.customer.app.entity;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name="customer")
@@ -37,7 +49,60 @@ public class Customer {
 	private String countrydesc;
 	
 	
+	   @ElementCollection(fetch = FetchType.EAGER)
+	   @CollectionTable(name="countrylists", joinColumns=@JoinColumn(name="id"))
+	   @Column(name="country")
+	   private List<String> countrylist;
 	
+
+	   
+
+	@ElementCollection
+	@LazyCollection(LazyCollectionOption.FALSE)
+	   @CollectionTable(name="paymentlists", joinColumns=@JoinColumn(name="id"))
+	   @Column(name="payment")
+	private List<String> paymentlist;
+	
+	
+	@Column(name="status")
+	private String status;
+	@Column(name="createdate")
+	private LocalDateTime createdate;
+
+	
+	
+	public LocalDateTime getCreatedate() {
+		return createdate;
+	}
+
+	public void setCreatedate(LocalDateTime createdate) {
+		this.createdate = createdate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public List<String> getPaymentlist() {
+		return paymentlist;
+	}
+
+	public void setPaymentlist(List<String> paymentlist) {
+		this.paymentlist = paymentlist;
+	}
+
+	public List<String> getCountrylist() {
+		return countrylist;
+	}
+
+	public void setCountrylist(List<String> countrylist) {
+		this.countrylist = countrylist;
+	}
+
 	public String getCountrydesc() {
 		return countrydesc;
 	}
@@ -103,9 +168,13 @@ public class Customer {
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", country=" + country
-				+ ", state=" + state + ", city=" + city + ", countrydesc=" + countrydesc + "]";
+				+ ", state=" + state + ", city=" + city + ", countrydesc=" + countrydesc + ", countrylist="
+				+ countrylist + ", paymentlist=" + paymentlist + "]";
 	}
 
+	
+	
+	
 	
 
 	
