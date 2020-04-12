@@ -8,43 +8,39 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="\"Country_Master\"")
-public class Country {
+@Table(name="\"Currency_Master\"")
+public class Currency {
 
 	@Id
-	@Column(name="\"Country\"")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="\"Currency\"")
 	private String id;
 	
 	@Column(name="\"Description\"")
-	private String countryName;
+	private String currency;
 
-	public String getCountryName() {
-		return countryName;
-	}
-
-	public void setCountryName(String countryName) {
-		this.countryName = countryName;
-	}
-
-	public Country() {
+	public Currency() {
 		
 	}
-
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	@Override
-	public String toString() {
-		return "Country [id=" + id + ", countryName=" + countryName + "]";
+	public String getCurrency() {
+		return currency;
 	}
 
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
 
-	
+	@Override
+	public String toString() {
+		return "Currency [id=" + id + ", currency=" + currency + "]";
+	}	
 		
 }
 

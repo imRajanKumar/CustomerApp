@@ -12,11 +12,10 @@ import javax.persistence.Table;
 public class State {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="\"State\"")
+	@Column(name="\"Region\"")
 	private String stateid;
 	
-	@Column(name="\"Countryid\"")
+	@Column(name="\"Country\"")
 	private String countryid;
 	
 	

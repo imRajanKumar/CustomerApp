@@ -2,17 +2,10 @@ package com.customer.app.controller;
 
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 
-import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +15,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
-
 import com.customer.app.entity.Customer;
-import com.customer.app.service.CityService;
+import com.customer.app.service.ActualQmService;
+import com.customer.app.service.BankKeyService;
 import com.customer.app.service.CountryService;
+import com.customer.app.service.CurrencyService;
 import com.customer.app.service.CustomerService;
+import com.customer.app.service.GSTFilingService;
+import com.customer.app.service.IDTypeService;
+import com.customer.app.service.IncotermService;
+import com.customer.app.service.LegalEntityService;
+import com.customer.app.service.MaterialTypeService;
+import com.customer.app.service.PaymentBlockService;
 import com.customer.app.service.PaymentMethodService;
+import com.customer.app.service.PaymentTermService;
 import com.customer.app.service.StateService;
+import com.customer.app.service.TitleService;
+import com.customer.app.service.VendorClassService;
+import com.customer.app.service.VendorGroupService;
 import com.google.gson.Gson;
 
 @Controller
@@ -46,11 +49,50 @@ public class CustomerController {
 	@Autowired
 	private StateService stateService;
 	
-	@Autowired
-	private CityService cityService;
 	
 	@Autowired
 	private PaymentMethodService paymentMethodService;
+	
+	@Autowired
+	private VendorGroupService vendorGroupService;
+	
+	@Autowired
+	private TitleService titleService;
+	
+	@Autowired
+	private MaterialTypeService materialTypeService;
+	
+	@Autowired
+	private GSTFilingService gSTFilingService;
+	
+	@Autowired
+	private IncotermService incotermService;
+	
+	@Autowired
+	private CurrencyService currencyService;
+	
+	@Autowired
+	private PaymentTermService paymentTermService;
+	
+	@Autowired
+	private BankKeyService bankKeyService;
+	
+	@Autowired
+	private VendorClassService vendorClassService;
+	
+	@Autowired
+	private PaymentBlockService paymentBlockService;
+	
+	@Autowired
+	private ActualQmService actualQmService;
+	
+	@Autowired
+	private IDTypeService IDTypeService;
+	
+	@Autowired
+	private LegalEntityService legalEntityService;
+	
+	
 	
 	@GetMapping("/list")
 	public String listCustomers(Model theModel) {
@@ -98,8 +140,19 @@ public class CustomerController {
 
 		theModel.addAttribute("customer", theCustomer);
 		theModel.addAttribute("id", theCustomer.getId());
+		theModel.addAttribute("vendergroup",vendorGroupService.getVendorGroup());
+		theModel.addAttribute("title",titleService.getTitle());
+		theModel.addAttribute("materialtype",materialTypeService.getMaterialType());
+		theModel.addAttribute("gstfiling",gSTFilingService.getGSTFiling());
+		theModel.addAttribute("incoterm",incotermService.getIncoterm());
+		theModel.addAttribute("currency",currencyService.getCurrency());
+		theModel.addAttribute("paymentterm",paymentTermService.getPaymentTerm());
+		theModel.addAttribute("paymentblock",paymentBlockService.getPaymentBlock());
+		theModel.addAttribute("actualqmsys",actualQmService.getActualqm());
+		theModel.addAttribute("legalentity",legalEntityService.getLegalEntity());
+		theModel.addAttribute("idtype",IDTypeService.getIDType());
 
-		
+
 		return "customer-form";
 	}
 	
@@ -124,12 +177,33 @@ public class CustomerController {
 		
 		theModel.addAttribute("country",countryService.getCountry());
 		String cid=theCustomer.getCountry();
-		String sid=theCustomer.getState();
+		String vgroup=theCustomer.getVenderGroup();
+		String v="";
+		if(vgroup=="TVO2" || vgroup=="TVO2A" || vgroup=="TV03C" || vgroup=="TVO3D"  )
+		{
+			v="I";
+		}
+		else
+		{
+			v="D";
+		}
+		theModel.addAttribute("venderclass",vendorClassService.getVendorClass(v));
 		theModel.addAttribute("state",stateService.getState(cid));
-		theModel.addAttribute("pmethod",paymentMethodService.getPaymentMethod(cid));
-
-		theModel.addAttribute("city",cityService.getCity(sid));
+		theModel.addAttribute("bankkey",bankKeyService.getBankKey(cid));
+		
+		theModel.addAttribute("pmethod",paymentMethodService.getPaymentMethod(v));
+		theModel.addAttribute("vendergroup",vendorGroupService.getVendorGroup());
+		theModel.addAttribute("title",titleService.getTitle());
+		theModel.addAttribute("materialtype",materialTypeService.getMaterialType());
+		theModel.addAttribute("gstfiling",gSTFilingService.getGSTFiling());
 		theModel.addAttribute("desc",countryService.getCountry(cid));
+		theModel.addAttribute("incoterm",incotermService.getIncoterm());
+		theModel.addAttribute("currency",currencyService.getCurrency());
+		theModel.addAttribute("paymentterm",paymentTermService.getPaymentTerm());
+		theModel.addAttribute("paymentblock",paymentBlockService.getPaymentBlock());
+		theModel.addAttribute("actualqmsys",actualQmService.getActualqm());
+		theModel.addAttribute("legalentity",legalEntityService.getLegalEntity());
+		theModel.addAttribute("idtype",IDTypeService.getIDType());
 		// set customer as a model attribute to pre-populate the form
 		theModel.addAttribute("customer", theCustomer);
 		
@@ -171,7 +245,26 @@ public class CustomerController {
 	}
 	
 	@ResponseBody
-	@GetMapping("loadPaymentMethodsByCountry/{id}")
+	@GetMapping("loadBankKeyByCountry/{id}")
+	public String loadBankKeyByCountry(@PathVariable("id") String id) {
+		
+		Gson gson = new Gson();
+		return gson.toJson(bankKeyService.getBankKey(id));
+	}
+	
+	@ResponseBody
+	@GetMapping("loadDescByBankKey/{id}")
+	public String loadDescByBankKey(@PathVariable("id") String id) {
+		System.out.println("******  "+bankKeyService.getBankName(id));
+		Gson gson = new Gson();
+		return gson.toJson(bankKeyService.getBankName(id));
+	}
+	
+	
+	
+	
+	@ResponseBody
+	@GetMapping("loadPaymentMethodsByVendorType/{id}")
 	public String loadPaymentMethodsByCountry(@PathVariable("id") String id) {
 	
 		
@@ -179,27 +272,32 @@ public class CustomerController {
 		return gson.toJson(paymentMethodService.getPaymentMethod(id));
 	}
 	
-	
 	@ResponseBody
-	@GetMapping("loadCityByState/{id}")
-	public String loadCityByState(@PathVariable("id") String id) {
+	@GetMapping("loadVendorClassByVendorType/{id}")
+	public String loadVendorClassByVendorType(@PathVariable("id") String id) {
 	
 		
 		Gson gson = new Gson();
-		return gson.toJson(cityService.getCity(id));
+		return gson.toJson(vendorClassService.getVendorClass(id));
 	}
+	
+	
 	
 	
 	@ResponseBody
 	@GetMapping("loadDescByCountry/{id}")
 	public String loadDescByCountry(@PathVariable("id") String id) {
-	
-		
 		Gson gson = new Gson();
 		return gson.toJson(countryService.getCountry(id));
 	}
 	
-
+	@ResponseBody
+	@GetMapping("loadGLCodeByVenderGroup/{id}")
+	public String loadGLCodeByVenderGroup(@PathVariable("id") String id) {
+		Gson gson = new Gson();
+		return gson.toJson(vendorGroupService.getGLCode(id));
+	}
+	
 }
 
 
