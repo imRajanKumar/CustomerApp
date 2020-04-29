@@ -1,6 +1,9 @@
 package com.customer.app.dao;
 
 import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -16,9 +19,9 @@ public class ActualQmDAOimple implements ActualQmDAO {
 	// need to inject the session factory
 	@Autowired
 	private SessionFactory sessionFactory;
-
 	@Override
 	public List<ActualQmSys> getActualqm() {
+		
 		Session currentSession = sessionFactory.getCurrentSession();
 
 		// create a query ... sort by last name

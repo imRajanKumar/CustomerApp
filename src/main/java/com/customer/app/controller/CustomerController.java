@@ -157,11 +157,18 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/saveCustomer")
-	public String saveCustomer(@ModelAttribute("customer") Customer theCustomer,@RequestParam("Save") String theId) {
+	public String saveCustomer(@ModelAttribute("customer") Customer theCustomer,@RequestParam(name="Save",required = false) String action) {
 		
-		System.out.println("id "+theId);
+		System.out.println("action: "+action);
 		// save the customer using our service
-		theCustomer.setStatus("inactive");
+		if(action!=null && action.equals("Save"))
+		{
+			theCustomer.setStatus("Draft");
+		}
+		else
+		{
+			theCustomer.setStatus("Inactive");
+		}
 		theCustomer.setCreatedate(LocalDateTime.now());
 		customerService.saveCustomer(theCustomer);	
 		

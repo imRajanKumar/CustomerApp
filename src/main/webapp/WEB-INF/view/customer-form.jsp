@@ -11,21 +11,34 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
  
+ <script type="text/css">
+ .abc
+ {
+ pointer-events: none;
+ }
+ 
+ </script>
 </head>
 
-	<%-- <link type="text/css"
+<%--  <link type="text/css"
 		  rel="stylesheet"
 		  href="${pageContext.request.contextPath}/resources/css/style.css">
 		  
 
 	<link type="text/css"
 		  rel="stylesheet"
-		  href="${pageContext.request.contextPath}/resources/css/add-customer-style.css"> --%>
+		  href="${pageContext.request.contextPath}/resources/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css"> --%> 
 </head>
 <script type="text/javascript">
 $(document).ready(function(){
 	
 	
+	document.getElementById('glcode').style.pointerEvents = 'none';
+	document.getElementById('comboboxBankName').style.pointerEvents = 'none';
+
+	$('#glcode').attr('readonly', true);
+	$('#comboboxBankName').attr('readonly', true);
+	 
 	var bankkey = $('#comboboxBankKey').val();
 	
 	 $.ajax({
@@ -44,7 +57,10 @@ $(document).ready(function(){
 		}
 	});  
 
-	 var vendergroup = $('#venderGroup').val();
+	 var vendergroup = $('#venderGroup').val().trim();
+	 
+	   
+
 	 $.ajax({
 		type: 'GET',
 		url: '${pageContext.request.contextPath }/customer/loadGLCodeByVenderGroup/' + vendergroup,
@@ -58,97 +74,76 @@ $(document).ready(function(){
 		}
 	});  
 	 
+	 var vendortype="";
+	 if(vendergroup=="TV02" || vendergroup=="TV02A" || vendergroup=="TV03C" || vendergroup=="TVO3D")
+		 {
+			 $('#gstno').attr('disabled', true);
+		  $('#panno').attr('disabled', true);
+		  $('#adhaarNo').attr('disabled',true);
+		  $('#sapVendorCode').attr('disabled', true);
+		  $('#lastName').attr('disabled', true);
+		  $('#title option[value="0003"]').attr("selected",true);
+			document.getElementById('title').style.pointerEvents = 'none';
+			$('#title').attr('readonly', true);
+		  
+		 }
 	 
-	 
-	/*  $.ajax({
-			type: 'GET',
-			url: '${pageContext.request.contextPath }/customer/loadVendorClassByVendorType/' + vendortype,
-			success: function(result) {
-				var result = JSON.parse(result);
-				var s='<option value=""><strong>Select</strong></option>';
-				for(var i = 0; i < result.length; i++) {
-					s += '<option value="' + result[i].gstvendorclass+ '">' + result[i].description + '</option>';
-				}
-				$('#vendorclass').html(s);
-			}
-		});   */
-	 
-	 
-	/* var s=$('#comboboxState').val();
-	
-	if(s=="UP")
-		{
-		$('#comboboxState').html("<option value='UP' >UTTERPRADESH</option>");
-		$('#comboboxState').attr('readonly', true);
+	 else if(vendergroup!="TV05")
+		 {
+		 $('#gstno').attr('disabled', false);
+		    $('#panno').attr('disabled', false);
+		    $('#adhaarNo').attr('disabled',false);
+		    
+		    $('#title option[value="0003"]').attr("selected",true);
+			document.getElementById('title').style.pointerEvents = 'none';
+			$('#title').attr('readonly', true);
+			$('#countryid option[value="IN"]').attr("selected", "selected");
+			$('#currency option[value="INR"]').attr("selected", "selected");
+			
+			document.getElementById('countryid').style.pointerEvents = 'none';
+			document.getElementById('currency').style.pointerEvents = 'none';
+			$('#countryid').attr('readonly', true);
+			 $('#currency').attr('readonly', true);
+		 }
+	 else
+		 {
+			 $('#gstno').attr('disabled', false);
+		    $('#panno').attr('disabled', false);
+		    $('#adhaarNo').attr('disabled',false);
+		   
+			  $('#salesPerson').attr('disabled', true);
+			  $('#salesPersonTeleNo').attr('disabled', true);
+			  
+			  $('#countryid option[value="IN"]').attr("selected", "selected");
+				$('#currency option[value="INR"]').attr("selected", "selected");
+				
+				document.getElementById('countryid').style.pointerEvents = 'none';
+				document.getElementById('currency').style.pointerEvents = 'none';
+				$('#countryid').attr('readonly', true);
+				 $('#currency').attr('readonly', true);
+			 
 
-		
-		} */
+		 }
+	 
+	
+	 var venderclass = $('#vendorclass').val();
+		  
+		 if(venderclass=="0" || venderclass=="N/A") 
+			 {
+			 $('#gstno').attr('disabled', true);
+			 }
+		 else
+			 {
+			 $('#gstno').attr('disabled', false);
+			 }
+		  
+	
+	 
+//------------------------Country---Change---------------------------------------------------
 	
 	
 	  $('#countryid').on('change', function(){
 		var countryId = $(this).val();
-		/*  $.ajax({
-				type: 'GET',
-				url: '${pageContext.request.contextPath }/customer/loadDescByCountry/' + countryId,
-				success: function(result) {
-					var result = JSON.parse(result);
-					 var s='';
-					for(var i = 0; i < result.length; i++) {
-						s += '<option value="' + result[i].id + '">' + result[i].countryName + '</option>';
-					} 
-					
-					$('#coun').html(s);
-				}
-				
-			});   */
-		
-		/*  $.ajax({
-				type: 'GET',
-				url: '${pageContext.request.contextPath }/customer/loadPaymentMethodsByCountry/' + countryId,
-				success: function(result) {
-					var result = JSON.parse(result);
-					var s='<option value=""><strong>Select</strong></option>';
-					for(var i = 0; i < result.length; i++) {
-						s += '<option value="' + result[i].paymentid + '">' + result[i].paymentName + '</option>';
-					}
-					$('#paymentid').html(s);
-				}
-				
-			 
-			});    */
-		 
-		 
-		 
-		 $('#dropDownId').val();
-		
-		if(countryId=="IND")
-			{
-			$('#comboboxState').html("<option value='UP' >UTTERPRADESH</option>");
-			$('#comboboxState').attr('readonly', true);
-
-			/* var stateId ="UP";
-			 $.ajax({
-				type: 'GET',
-				url: '${pageContext.request.contextPath }/customer/loadCityByState/' + stateId,
-				success: function(result) {
-					var result = JSON.parse(result);
-					//var s = '';
-					var s='<option value=""><strong>Select</strong></option>';
-					for(var i = 0; i < result.length; i++) {
-						s += '<option value="' + result[i].cityid+ '">' + result[i].cityName + '</option>';
-					}
-					
-					$('#comboboxCity').html(s);
-				}
-			});   */
-			}
-		
-		else
-			{
-			
-			
-			
-			
 		 $.ajax({
 			type: 'GET',
 			url: '${pageContext.request.contextPath }/customer/loadStatesByCountry/' + countryId,
@@ -160,18 +155,9 @@ $(document).ready(function(){
 				}
 				$('#comboboxState').html(s);
 			}
-			
-		 
-		});   
-		 
-		 
-		 
-		 
-		 
-			}
 
-		
-		
+		});   
+
 		$.ajax({
 			type: 'GET',
 			url: '${pageContext.request.contextPath }/customer/loadBankKeyByCountry/' + countryId,
@@ -183,33 +169,14 @@ $(document).ready(function(){
 				}
 				$('#comboboxBankKey').html(s);
 			}
-			
-		 
+
 		});   
-		
-		
-		
+
 	});  
 	  
 	  
-	  $('#comboboxState').on('change', function(){
-			var stateId = $(this).val();
-			 $.ajax({
-				type: 'GET',
-				url: '${pageContext.request.contextPath }/customer/loadCityByState/' + stateId,
-				success: function(result) {
-					var result = JSON.parse(result);
-					//var s = '';
-					var s='<option value=""><strong>Select</strong></option>';
-					for(var i = 0; i < result.length; i++) {
-						s += '<option value="' + result[i].cityid+ '">' + result[i].cityName + '</option>';
-					}
-					
-					$('#comboboxCity').html(s);
-				}
-			});  
-		
-		}); 
+	//------------------------BankKey---Change---------------------------------------------------
+
 	  
 	  $('#comboboxBankKey').on('change', function(){
 			var bankkey = $(this).val();
@@ -218,7 +185,7 @@ $(document).ready(function(){
 				url: '${pageContext.request.contextPath }/customer/loadDescByBankKey/' + bankkey,
 				success: function(result) {
 					
-					alert(result)
+					
 					var result = JSON.parse(result);
 					var s = '';
 					for(var i = 0; i < result.length; i++) {
@@ -232,8 +199,41 @@ $(document).ready(function(){
 		}); 
 	  
 	  
+	//------------------------VenderGroup---Change---------------------------------------------------
+
+	  
 	  $('#venderGroup').on('change', function(){
+		  
 			var vendergroup = $(this).val();
+			
+			
+			if(vendergroup=="TV05")
+			{
+			$('#sapVendorCode').attr('disabled', false);
+			  $('#lastName').attr('disabled', false);
+			  $('#salesPerson').attr('disabled', true);
+			  $('#salesPersonTeleNo').attr('disabled', true);
+				$('#title option[value="0003"]').attr("selected",false);
+				document.getElementById('title').style.pointerEvents = 'auto';
+				$('#title').attr('readonly', false);
+				
+
+			}
+		else
+			{
+			 $('#sapVendorCode').attr('disabled', true);
+			  $('#lastName').attr('disabled', true);
+			  $('#salesPerson').attr('disabled', false);
+			  $('#salesPersonTeleNo').attr('disabled', false);
+			  
+				$('#title option[value="0003"]').attr("selected", "selected");
+				document.getElementById('title').style.pointerEvents = 'none';
+				$('#title').attr('readonly', true);
+
+
+			}
+		  
+			
 			 $.ajax({
 				type: 'GET',
 				url: '${pageContext.request.contextPath }/customer/loadGLCodeByVenderGroup/' + vendergroup,
@@ -277,18 +277,101 @@ $(document).ready(function(){
 					url: '${pageContext.request.contextPath }/customer/loadPaymentMethodsByVendorType/' + vendortype,
 					success: function(result) {
 						var result = JSON.parse(result);
-						var s='<option value=""><strong>Select</strong></option>';
+						var s='';
 						for(var i = 0; i < result.length; i++) {
 							s += '<option value="' + result[i].paymentmethod+ '">' + result[i].paymentmethod + '</option>';
-							alert(s)
+							
 						}
 						$('#paymentmethods').html(s);
 					}
 				});  
-		}); 
+		
 	  
+	  if(vendortype=="D")
+		  {
+			$('#countryid option[value="IN"]').attr("selected", "selected");
+			$('#currency option[value="INR"]').attr("selected", "selected");
+			
+			document.getElementById('countryid').style.pointerEvents = 'none';
+			document.getElementById('currency').style.pointerEvents = 'none';
+			$('#countryid').attr('readonly', true);
+			 $('#currency').attr('readonly', true);
+			 
+			 
+			
+			var countryId = $('#countryid').val();
+			 $.ajax({
+				type: 'GET',
+				url: '${pageContext.request.contextPath }/customer/loadStatesByCountry/' + countryId,
+				success: function(result) {
+					var result = JSON.parse(result);
+					var s='<option value=""><strong>Select</strong></option>';
+					for(var i = 0; i < result.length; i++) {
+						s += '<option value="' + result[i].stateid + '">' + result[i].stateName + '</option>';
+					}
+					$('#comboboxState').html(s);
+				}
+				
+			 
+			});   
+
+			$.ajax({
+				type: 'GET',
+				url: '${pageContext.request.contextPath }/customer/loadBankKeyByCountry/' + countryId,
+				success: function(result) {
+					var result = JSON.parse(result);
+					var s='<option value=""><strong>Select</strong></option>';
+					for(var i = 0; i < result.length; i++) {
+						s += '<option value="' + result[i].bankkey + '">' + result[i].bankkey + '</option>';
+					}
+					$('#comboboxBankKey').html(s);
+				}
+				
+			 
+			});   
+			
+			  $('#gstno').attr('disabled', false);
+			  $('#panno').attr('disabled', false);
+			  $('#adhaarNo').attr('disabled',false);
+		  }
 	  
+	  else
+		  {
+		  
+		  $('#gstno').attr('disabled', true);
+		  $('#panno').attr('disabled', true);
+		  $('#adhaarNo').attr('disabled', true);
+		  
+
+			
+			
+		 
+			$('#countryid option[value="IN"]').attr("selected",false);
+			$('#currency option[value="INR"]').attr("selected", false);
+			document.getElementById('countryid').style.pointerEvents = 'auto';
+			document.getElementById('currency').style.pointerEvents = 'auto';
+			 $('#countryid').attr('readonly', false);
+			 $('#currency').attr('readonly', false);
+		  }
 	  
+	  }); 
+	 
+	
+	  $('#vendorclass').on('change', function(){
+		  
+		 if($(this).val()=="0" || $(this).val()=="N/A") 
+			 {
+			 $('#gstno').attr('disabled', true);
+			 }
+		 else
+			 {
+			 $('#gstno').attr('disabled', false);
+			 }
+		  
+	  });
+	
+	
+	
 	  
 });
 
@@ -386,29 +469,7 @@ $(document).ready(function(){
 		    </div>   
 		    </div>
 		       
-		  <%--    <div class="form-group ">
-		      <label class="control-label col-sm-4" for="name">Country2</label>
-		      <div class="col-sm-8 input-group">
-		       	   
-		       	   <form:select path="countrylist" id="countryidd" multiple="true" class="form-control">
-   <form:option value="NONE" label="--- Select ---"/>
-   
-         <form:options items="${country}" itemValue="id" itemLabel="countryName"/>
-   
-</form:select>
-		      </div>
-		    </div>   
-		    
-		   <div class="form-group ">
-		      <label class="control-label col-sm-4" for="name">CountryDescription</label>
-		      <div class="col-sm-8 input-group">
-		       	   
-		       	   <form:select path="countrydesc" id="coun" class="form-control">
-   
-    <form:options items="${desc}" itemValue="id" itemLabel="countryName"/>
-</form:select>
-		      </div>
-		    </div>    --%>
+		
    		
    		
    		
@@ -416,7 +477,7 @@ $(document).ready(function(){
    		<div class="form-group col-md-6">
 		      <label class="control-label col-sm-4" for="name">Country</label>
 		      <div class="col-sm-8 input-group">
-		       	   <form:select path="country" id="countryid"  class="form-control">
+		       	   <form:select path="country" id="countryid" name="options" class="form-control">
    <form:option value="NONE" label="Select"/>
          <form:options items="${country}" itemValue="id" itemLabel="countryName"/>
    </form:select>
@@ -586,8 +647,7 @@ $(document).ready(function(){
 		      <div class="col-sm-8 input-group">
 		       	   <form:select path="bankName" id="comboboxBankName" class="form-control">
             
-<%--             <form:options items="${state}" itemValue="stateid" itemLabel="stateName"/>
- --%>             </form:select>
+           </form:select>
 		      </div>
 		    </div>   
 		    </div> 
@@ -598,7 +658,7 @@ $(document).ready(function(){
    		<div class="form-group col-md-6">
    				      <label class="control-label col-sm-4" for="name">Bank Account No</label>
 		      <div class="col-sm-8 input-group">
-		       	   <form:input path="bankaccountno" class="form-control"    id="bankaccountno"   placeholder="Sales Person" autocomplete="off"/> 
+		       	   <form:input path="bankaccountno" class="form-control"    id="bankaccountno"   placeholder="Bank Account No" autocomplete="off"/> 
 		      </div>
 		    </div>   
 		    
@@ -644,7 +704,6 @@ $(document).ready(function(){
 		      <label class="control-label col-sm-4" for="name">Payment Methods</label>
 		      <div class="col-sm-8 input-group">
 		       	   <form:select path="paymentethods" id="paymentmethods" multiple="true"  class="form-control">
-   <form:option value="NONE" label="--- Select ---"/>
                     <form:options items="${pmethod}" itemValue="paymentmethod" itemLabel="paymentmethod"/>
  
    </form:select>
@@ -696,8 +755,7 @@ $(document).ready(function(){
 		      <div class="col-sm-8 input-group">
 		       	   <form:select path="glCode" id="glcode" class="form-control">
             
-<%--             <form:options items="${state}" itemValue="stateid" itemLabel="stateName"/>
- --%>             </form:select>
+            </form:select>
 		      </div>
 		    </div>   
 		    </div>
@@ -709,7 +767,7 @@ $(document).ready(function(){
 		      <label class="control-label col-sm-4" for="name">Legal Entity</label>
 		      <div class="col-sm-8 input-group">
 		       	   <form:select path="legalEntityCode" id="legalEntity"  class="form-control">
-   <form:option value="NONE" label="--- Select ---"/>
+   <form:option value="NONE" label="Select"/>
          <form:options items="${legalentity}" itemValue="legalentity" itemLabel="description"/>
    </form:select>
 		      </div>
@@ -762,46 +820,31 @@ $(document).ready(function(){
    		 <label class="control-label col-sm-4" for="name">Actual QM sys</label>
 		      <div class="col-sm-8 input-group">
 		       	   <form:select path="actualQmSys" id="actualQmSys"  class="form-control">
-   <form:option value="NONE" label="Select"/>
          <form:options items="${actualqmsys}" itemValue="actualqmsyss" itemLabel="description"/>
    </form:select>
 		      </div>
 		    </div>   
 		    </div> 
 		    
-		    
-		    
-		    <%--  <div class="form-group ">
-		      <label class="control-label col-sm-4" for="name">City</label>
-		      <div class="col-sm-8 input-group">
-		       	   
-		       	   <form:select path="city" id="comboboxCity" class="form-control">
-      <form:option  value="NONE" label="--- Select ---"/>
-   
-              <form:options items="${city}" itemValue="cityid" itemLabel="cityName"/>
-  
-   
-</form:select>
-		      </div>
-		    </div>    --%>
-		    
-		   <%--  
-		    <div class="form-group ">
-		      <label class="control-label col-sm-4" for="name">paymentmethod</label>
-		      <div class="col-sm-8 input-group">
-		       	   
-		       	   <form:select path="paymentlist" id="paymentid" multiple="true" class="form-control">
-   
-          <form:options items="${pmethod}" itemValue="paymentid" itemLabel="paymentName"/> 
-   
-</form:select>
-		      </div>
-		    </div>    --%>
+		<div class="col-md-1 col-md-offset-8">
+   		
+    		<button type="submit"  class="btn btn-primary btn-md" name="Save" id="save"  value="Save">Save</button>
+   		</div>
+            <div class="col-md-1"><button type="submit"  class="btn btn-primary btn-md" name="Submite" id="submit"  value="Submit">Submit</button></div>
+		     <div class="col-md-1"> <button type="button" class="btn btn-primary btn-md"  >Clear</button></div>
+		     <div class="col-md-1"> <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal" >Edit</button></div>
+		         
+		   
 		    
    		</div>
    						
-			<div class="col-md-3 col-md-offset-8">
-   		<input type="submit"  name="Save" class="btn btn-primary form-control"  value="Save"/></div>
+		
+   		
+   		
+   		
+   		
+   		
+   		
    		
    		</div>
    		</div>
