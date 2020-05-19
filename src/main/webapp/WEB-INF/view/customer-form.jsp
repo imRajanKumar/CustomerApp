@@ -2,32 +2,36 @@
 
 <!DOCTYPE html>
 <html>
-
 <head>
 	<title>Customer</title>
 	<meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+ 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
- 
- <script type="text/css">
- .abc
- {
- pointer-events: none;
- }
- 
- </script>
-</head>
+  
+  
+  
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
 
-<%--  <link type="text/css"
-		  rel="stylesheet"
-		  href="${pageContext.request.contextPath}/resources/css/style.css">
+
 		  
-
-	<link type="text/css"
+		  
+		
+		  
+		 <%--  <link type="text/javascript"
 		  rel="stylesheet"
-		  href="${pageContext.request.contextPath}/resources/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css"> --%> 
+		  href="${pageContext.request.contextPath}/resources/bootstrap/Datatables/datatables.min.js">   
+
+	 <link type="text/css"
+		  rel="stylesheet"
+		  href="${pageContext.request.contextPath}/resources/bootstrap/Datatables/datatables.min.css">   --%>
+		  
+		   
 </head>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -40,13 +44,10 @@ $(document).ready(function(){
 	$('#comboboxBankName').attr('readonly', true);
 	 
 	var bankkey = $('#comboboxBankKey').val();
-	
 	 $.ajax({
 		type: 'GET',
 		url: '${pageContext.request.contextPath }/customer/loadDescByBankKey/' + bankkey,
 		success: function(result) {
-			
-			
 			var result = JSON.parse(result);
 			var s = '';
 			for(var i = 0; i < result.length; i++) {
@@ -374,6 +375,21 @@ $(document).ready(function(){
 	
 	  
 });
+
+
+function ShowEditPopup()
+{	
+	    $.ajax({
+			type: "GET",
+			url: "${pageContext.request.contextPath }/customer/list",    			
+			cache: false,
+			success: function(response)
+	        {
+				
+	            $("#tableView").html(response);
+	        }
+	    });
+}
 
 </script>
 <body>
@@ -832,29 +848,37 @@ $(document).ready(function(){
    		</div>
             <div class="col-md-1"><button type="submit"  class="btn btn-primary btn-md" name="Submite" id="submit"  value="Submit">Submit</button></div>
 		     <div class="col-md-1"> <button type="button" class="btn btn-primary btn-md"  >Clear</button></div>
-		     <div class="col-md-1"> <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal" >Edit</button></div>
+		     <div class="col-md-1"> <button type="button" onclick="ShowEditPopup()" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal" >Edit</button></div>
 		         
 		   
 		    
    		</div>
-   						
-		
-   		
-   		
-   		
-   		
-   		
-   		
-   		
+   		  </div>
    		</div>
-   		</div>
-   		
    		
    		</div>
 		
    		
    		
-		
+		  	<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog" >
+  <div class="modal-dialog" style="width: 80%;">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+     
+      <div class="modal-body">
+        <span id="tableView">
+        </span>
+      </div>
+      <div class="modal-footer">
+        <button type="button"  class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>	
+
 		
 		</form:form>
 	

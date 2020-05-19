@@ -4,7 +4,7 @@ package com.customer.app.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +39,8 @@ import com.google.gson.Gson;
 @RequestMapping("/customer")
 public class CustomerController {
 
+	
+	   private static final Logger LOGGER = Logger.getLogger(CustomerController.class);
 	// need to inject our customer service
 	@Autowired
 	private CustomerService customerService;
@@ -97,6 +99,8 @@ public class CustomerController {
 	@GetMapping("/list")
 	public String listCustomers(Model theModel) {
 		
+		
+		
 		// get customers from the service
 		List<Customer> theCustomers = customerService.getCustomers();
 		// add the customers to the model
@@ -120,7 +124,7 @@ public class CustomerController {
 	    System.out.println(result);*/
 		
 	
-	    return "list-customers";
+	    return "roleview";
 		
 		
 		
@@ -128,11 +132,11 @@ public class CustomerController {
 		
 	}
 	
-	
-	
 	@GetMapping("/showFormForAdd")
 	public String showFormForAdd(Model theModel) {
 		
+		
+		LOGGER.info("HELLLLLLLLLLLLLLLLLLLLLLL");
 		// create model attribute to bind form data
 		Customer theCustomer = new Customer();
 		
@@ -304,6 +308,7 @@ public class CustomerController {
 		Gson gson = new Gson();
 		return gson.toJson(vendorGroupService.getGLCode(id));
 	}
+	
 	
 }
 
